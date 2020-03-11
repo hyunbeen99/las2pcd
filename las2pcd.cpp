@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <vector>
 #include <liblas/liblas.hpp>
 #include <pcl/io/io.h>
 #include <pcl/io/pcd_io.h>
@@ -10,6 +11,7 @@ using namespace std;
 int main (int argc, char *argv[])
 {
 	string filePath;
+
 	cout << "===================================================================" << endl;
 	cout << "LAS2PCD - Converts .las point clouds into PCL-friendly format .pcd" << endl;
 	cout << "ver 0.3 - 16 March 2018" << endl;
@@ -24,22 +26,25 @@ int main (int argc, char *argv[])
 
 	// cout << "Enter full .las file path: (or you can also drag the file here)" << endl;
     
-	// getline(cin, filePath);
+	filePath = "home/hyeonbeen/A1_LANE.las";
+	const char * c = filePath.c_str();
 	// Edited to make fully command-line:
-	filePath=argv[1];
+	c = argv[1];
 
-    std::cerr << "INFO : Loading : " << filePath << std::endl;
+    std::cerr << "INFO : Loading : " << c << std::endl;
     
     // instancing a new PCL pointcloud object
     pcl::PointCloud<pcl::PointXYZRGB> cloud;
 
+	string mystr(c);
     // Opening  the las file
-    std::ifstream ifs(filePath.c_str(), std::ios::in | std::ios::binary);
+    std::ifstream ifs(mystr.c_str(), std::ios::in | std::ios::binary);
+
 
 	// Safeguard against opening failure
     if(ifs.fail()) 
 	{
-        std::cerr << "ERROR : Impossible to open the file : " << filePath <<std::endl;
+        std::cerr << "ERROR : Impossible to open the file : " << mystr <<std::endl;
         return 1;
     }
 
@@ -53,7 +58,7 @@ int main (int argc, char *argv[])
 	cloud.is_dense = false;
 	cloud.points.resize (cloud.width * cloud.height);
 
-	cout << "INFO : " << cloud.points.size () << " points detected in " << filePath << endl;
+	cout << "INFO : " << cloud.points.size () << " points detected in " << mystr << endl;
 
 	int i=0;				// counter
 	uint16_t r1, g1, b1;	// RGB variables for .las (16-bit coded)
